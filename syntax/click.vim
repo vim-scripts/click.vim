@@ -1,8 +1,10 @@
+"---------------------------------------------------------------------
+" $Id: click.vim,v 1.3 2004/08/24 09:53:26 soso Exp $
+"
 " Vim syntax file
-" $Id: click.vim,v 1.1 2004/08/23 15:08:48 soso Exp $
 " Language:    click
 " Maintainer:  Soeren Sonntag <soeren . sonntag AT web . de>
-" Last Change: 2004-08-23
+" Last Change: 2004-08-24
 " Description: click (http://www.pdos.lcs.mit.edu/click/) syntax file
 "---------------------------------------------------------------------
 
@@ -27,24 +29,28 @@ syn match       clickNumber     /\<0[xX]\x\+\>/
 syn match       clickHexGood    /\<\x\x\>\|\s\+/ contained
 syn region      clickHexValues  matchgroup=clickHexParens start=/\\</ end=/>/ contains=clickHexGood
 
-" match addresses of several protocols
-syn match       clickIP4        /\<\d\{1,3}\.\d\{1,3}\.\d\{1,3}\.\d\{1,3}\>/
-syn match       clickIP6        /\<\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}\>/
-syn match       clickEth        /\<\x\{1,2}:\x\{1,2}:\x\{1,2}:\x\{1,2}:\x\{1,2}:\x\{1,2}\>/
-
 " match separators
 syn match       clickOperator   /||\@!\||||\@!/
 
 " match compound variables
 syn match       clickVariable   /\$\w\+/
 
+" match instances and classes
+syn match       clickInstance   /\zs[A-Za-z0-9_\@]\+\(\/\=[A-Za-z0-9_\@]\)*\ze\s*::/
+syn match       clickClass      /::\s*\zs\w\+\>\ze/
+
 " match strings
-syn region      clickString     start=/"/ end=/"/
+syn region      clickString     start=/"/ skip=/\\"/ end=/"/
 
 " match comments
 syn keyword     clickTodo       Todo contained
 syn match       clickComment    /\/\/.*/ contains=clickTodo
 syn region      clickComment    start=/\/\*/ end=/\*\// contains=clickTodo
+
+" match addresses of several protocols
+syn match       clickIP4        /\<\d\{1,3}\.\d\{1,3}\.\d\{1,3}\.\d\{1,3}\>/
+syn match       clickIP6        /\<\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}:\x\{1,4}\>/
+syn match       clickEth        /\<\x\{1,2}:\x\{1,2}:\x\{1,2}:\x\{1,2}:\x\{1,2}:\x\{1,2}\>/
 
 
 " Define the default highlighting.
@@ -63,15 +69,16 @@ if version >= 508 || !exists("did_c_syn_inits")
   HiLink clickComment           Comment
   HiLink clickOperator          Operator 
   HiLink clickVariable          Type
+  HiLink clickInstance          Type
+  HiLink clickClass             Statement
   HiLink clickString            String
   HiLink clickHexValues         Error
   HiLink clickHexParens         Number
   HiLink clickHexGood           Number
-  HiLink clickIP4               Number
-  HiLink clickIP6               Number
-  HiLink clickEth               Number
+  HiLink clickIP4               Type
+  HiLink clickIP6               Type
+  HiLink clickEth               Type
   HiLink clickTodo              Todo
-  HiLink clickError             Error
 
   delcommand HiLink
 endif
